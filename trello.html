@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('create-card',{
+        category: 'function',
+        color: '#3FADB5',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "trello.png",
+        label: function() {
+            return this.name||"create-card";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="create-card">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="create-card">
+    <p>A simple node to create a Trello Card</p>
+</script>
