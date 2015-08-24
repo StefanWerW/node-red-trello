@@ -1,0 +1,53 @@
+<script type="text/x-red" data-template-name="trello-credentials">
+    <div class="form-row" id="node-config-trello-row"></div>
+    <input type="hidden" id="node-config-input-screen_name">
+</script>
+
+<script type="text/javascript">
+(function() {
+    var trelloConfigNodeId = null;
+    var trelloConfigNodeIntervalId = null;
+    RED.nodes.registerType('trello-credentials',{
+      category: 'config',
+      defaults: {
+        screen_name: {value:""}
+      },
+      credentials: {
+        screen_name: {type:"text"},
+        access_token: {type: "password"},
+        access_token_secret: {type:"password"}
+      },
+      label: function() {
+        return this.screen_name;
+      },
+      exportable: false,
+    });
+})();
+
+
+<script type="text/javascript">
+    RED.nodes.registerType('create-card',{
+        category: 'function',
+        color: '#298FCA',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "trello.png",
+        label: function() {
+            return this.name||"Create Card";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="create-card">
+  <div class="form-row">
+    <label for="node-input-trello"><i class="fa fa-user"></i> <span data-i18n="trello.label.trello-id"></span></label>
+    <input type="text" id="node-input-trello">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="create-card">
+    <p>A simple node to create a Trello Card</p>
+</script>

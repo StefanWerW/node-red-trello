@@ -1,13 +1,21 @@
 {
-    "name"         : "node-red-trello",
-    "version"      : "0.0.1",
-    "description"  : "A Trello node for node-red",
-    "dependencies": {
-    },
-    "keywords": [ "node-red" ],
-    "node-red"     : {
-        "nodes": {
-            "Trello-API": "node-trello.js"
-        }
+  "name": "node-red-trello",
+  "version": "0.0.1",
+  "description": "A Trello node for node-red",
+  "dependencies": {
+    "node-trello": "^1.1.2"
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "node-red": {
+    "nodes": {
+      "trello": "node-red-trello.js"
+    }
+  },
+  "author": {
+        "name": "Stefan W",
+        "email": "scaw.dev@gmail.com",
+        "url": "https://github.com/StefanWerW"
     }
 }
