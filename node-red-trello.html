@@ -1,40 +1,80 @@
-<script type="text/x-red" data-template-name="trello-credentials">
-    <div class="form-row" id="node-config-trello-row"></div>
-    <input type="hidden" id="node-config-input-screen_name">
-</script>
-
+<!--  CREDENTIALS -->
 <script type="text/javascript">
 (function() {
     var trelloConfigNodeId = null;
     var trelloConfigNodeIntervalId = null;
+
     RED.nodes.registerType('trello-credentials',{
       category: 'config',
       defaults: {
-        screen_name: {value:""}
+        user_me: {value:""}
       },
       credentials: {
-        screen_name: {type:"text"},
+        user_me: {type:"text"},
         access_token: {type: "password"},
         access_token_secret: {type:"password"}
       },
       label: function() {
-        return this.screen_name;
+        return this.user_me;
       },
       exportable: false,
+      oneditprepare: function() {
+        var trelloConfigNodeId = this.id;
+        var apikeybutton = this._("trello.label.apikeybutton");
+        var trelloID = this._("trello.label.trello-id");
+        function showTrelloAuthStart(){
+          $("#node-config-dialog-ok").button("disable");
+          $("#node-config-trello-row").html('<div style="text-align: center; margin-top: 20px; "><a class="btn" id="node-config-trello-devkey" href="https://trello.com/app-key" target="_blank">'+apikeybutton+'</a></div>');
+          §("#node-config-trello-startauth").click(function(){
+            
+          });
+        }
+        if (!this.user_me || this.user_me === "") {
+          showTrelloAuthStart();
+        } else {
+          if (this.credentials.user_me) {
+              //updateTwitterScreenName(this.credentials.user_me);
+          } else {
+            showTrelloAuthStart();
+          }
+        }
+      }
     });
 })();
+</script>
+
+<script type="text/x-red" data-template-name="trello-credentials">
+    <div class="form-row" id="node-config-trello-row"></div>
+
+    <div class="form-row">
+      <label for="node-input-apikey"><i class="fa fa-user"></i> <span data-i18n="trello.label.apikey"></span></label>
+      <input type="text" id="node-input-apikey">
+    </div>
+
+    <div style="text-align: center; margin-top: 20px; ">
+      <a class="btn" id="node-config-trello-startauth" target="_blank">Start Authentication</a>
+    </div>
+
+    <div class="form-row">
+      <input type="hidden" id="node-config-input-user_me">
+    </div>
+
+</script>
 
 
+<!--  CREATE CARD> -->
 <script type="text/javascript">
     RED.nodes.registerType('create-card',{
-        category: 'function',
+        category: 'social-output',
         color: '#298FCA',
         defaults: {
+            trello: {type:"trello-credentials", required:true},
             name: {value:""}
         },
         inputs:1,
         outputs:0,
         icon: "trello.png",
+        align: "right",
         label: function() {
             return this.name||"Create Card";
         }
@@ -49,5 +89,33 @@
 </script>
 
 <script type="text/x-red" data-help-name="create-card">
+    <p>A simple node to create a Trello Card</p>
+</script>
+
+<!--  GET BOARDS> -->
+<script type="text/javascript">
+    RED.nodes.registerType('get-boards',{
+        category: 'social',
+        color: '#298FCA',
+        defaults: {
+            trello: {type:"trello-credentials", required:true}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "trello.png",
+        label: function() {
+            return this.name||"Get Boards";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="get-boards">
+  <div class="form-row">
+    <label for="node-input-trello"><i class="fa fa-user"></i> <span data-i18n="trello.label.trello-id"></span></label>
+    <input type="text" id="node-input-trello">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="get-boards">
     <p>A simple node to create a Trello Card</p>
 </script>

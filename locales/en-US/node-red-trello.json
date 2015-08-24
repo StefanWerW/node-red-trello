@@ -5,9 +5,8 @@
             "search": "Search",
             "for": "for",
             "user": "User",
-            "dmslabel": "DMs",
-            "tweetslabel": "tweets",
-            "clickhere": "Click here to authenticate with Twitter."
+            "apikeybutton" : "Get API Key",
+            "apikey" : "Add your API Key here: "
         },
         "placeholder": {
             "for": "comma-separated words, @ids, #tags",
