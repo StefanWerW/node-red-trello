@@ -7,7 +7,7 @@
     "keywords": [ "node-red" ],
     "node-red"     : {
         "nodes": {
-            "sample": "node-trello.js"
+            "Trello-API": "node-trello.js"
         }
     }
 }
