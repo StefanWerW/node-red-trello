@@ -1,22 +1,21 @@
+
 <!--  CREDENTIALS -->
 <script type="text/javascript">
 (function() {
-    var trelloConfigNodeId = null;
-    var trelloConfigNodeIntervalId = null;
+
 
     RED.nodes.registerType('trello-credentials',{
       category: 'config',
       defaults: {
-        user_me: {value:""}
+
       },
       credentials: {
-        user_me: {type:"text"},
-        access_token: {type: "password"},
-        access_token_secret: {type:"password"}
+        token: {type: "password"},
+        apikey: {type:"password"}
       },
-      label: function() {
+      /*label: function() {
         return this.user_me;
-      },
+      },*/
       exportable: false,
       oneditprepare: function() {
         var trelloConfigNodeId = this.id;
@@ -24,27 +23,43 @@
         var trelloID = this._("trello.label.trello-id");
         function showTrelloAuthStart(){
           $("#node-config-dialog-ok").button("disable");
-          $("#node-config-trello-row").html('<div style="text-align: center; margin-top: 20px; "><a class="btn" id="node-config-trello-devkey" href="https://trello.com/app-key" target="_blank">'+apikeybutton+'</a></div>');
-          §("#node-config-trello-startauth").click(function(){
-            
+          $("#node-input-apikey").change(function() {
+            $("#node-config-trello-tokenbutton").attr('href', 'https://trello.com/1/authorize?key='+$("#node-input-apikey").val()+'&name=NODE-RED&expiration=never&response_type=token&scope=read,write')
           });
+          $("#node-input-token").change(function() {
+            if($("#node-input-token").val() && $("#node-input-token").val() != "" && $("#node-input-apikey").val() && $("#node-input-apikey").val() != ""){
+              $("#node-config-trello-startconfig").button("enable");
+            }
+          });
+          $("#node-config-trello-startconfig").click(function(){
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+              if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                console.log(xmlhttp.response);
+              }
+            }
+            xmlhttp.open("GET","https://trello.com/1/members/me?key="+ $("#node-input-apikey").val() +"&token=" + $("#node-input-token").val() + "",true);
+            xmlhttp.send();
+          });
+
+
         }
-        if (!this.user_me || this.user_me === "") {
-          showTrelloAuthStart();
-        } else {
-          if (this.credentials.user_me) {
-              //updateTwitterScreenName(this.credentials.user_me);
-          } else {
-            showTrelloAuthStart();
-          }
-        }
+
+        showTrelloAuthStart();
+      },
+      oneditsave: function() {
+        console.log("SAVE");
       }
     });
 })();
 </script>
 
 <script type="text/x-red" data-template-name="trello-credentials">
-    <div class="form-row" id="node-config-trello-row"></div>
+    <div class="form-row" id="node-config-trello-row">
+      <div style="text-align: center; margin-top: 20px; ">
+        <a class="btn" id="node-config-trello-devkey" href="https://trello.com/app-key" target="_blank"><span data-i18n="trello.label.apikeybutton"></span></a>
+      </div>
+    </div>
 
     <div class="form-row">
       <label for="node-input-apikey"><i class="fa fa-user"></i> <span data-i18n="trello.label.apikey"></span></label>
@@ -52,11 +67,16 @@
     </div>
 
     <div style="text-align: center; margin-top: 20px; ">
-      <a class="btn" id="node-config-trello-startauth" target="_blank">Start Authentication</a>
+      <a class="btn" id="node-config-trello-tokenbutton" target="_blank">getToken</a>
     </div>
 
     <div class="form-row">
-      <input type="hidden" id="node-config-input-user_me">
+      <label for="node-input-token"> <span data-i18n="trello.label.token"></span></label>
+      <input type="text" id="node-input-token">
+    </div>
+
+    <div style="text-align: center; margin-top: 20px; ">
+      <a class="btn" id="node-config-trello-startconfig" target="_blank">Start Config</a>
     </div>
 
 </script>

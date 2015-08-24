@@ -6,7 +6,8 @@
             "for": "for",
             "user": "User",
             "apikeybutton" : "Get API Key",
-            "apikey" : "Add your API Key here: "
+            "apikey" : "Add your API Key here:",
+            "token" : "Add you token here:"
         },
         "placeholder": {
             "for": "comma-separated words, @ids, #tags",

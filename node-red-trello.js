@@ -3,13 +3,15 @@ module.exports = function(RED){
   //CREDENTIALS
   function TrelloNode(n) {
         RED.nodes.createNode(this,n);
-        this.user_me = n.user_me;
+        this.apikey = n.apikey;
+        this.token = n.token
+        this.warn("HERE");
+        console.log("TrelloNODE");
     }
     RED.nodes.registerType("trello-credentials",TrelloNode,{
         credentials: {
-            user_me: {type:"text"},
-            access_token: {type: "password"},
-            access_token_secret: {type:"password"}
+            token: {type: "password"},
+            apikey: {type:"password"}
         }
     });
 
