@@ -7,15 +7,15 @@
     RED.nodes.registerType('trello-credentials',{
       category: 'config',
       defaults: {
-
+        name: {value:""}
       },
       credentials: {
         token: {type: "password"},
         apikey: {type:"password"}
       },
-      /*label: function() {
-        return this.user_me;
-      },*/
+      label: function() {
+        return this.name;
+      },
       exportable: false,
       oneditprepare: function() {
         var trelloConfigNodeId = this.id;
@@ -23,22 +23,25 @@
         var trelloID = this._("trello.label.trello-id");
         function showTrelloAuthStart(){
           $("#node-config-dialog-ok").button("disable");
-          $("#node-input-apikey").change(function() {
-            $("#node-config-trello-tokenbutton").attr('href', 'https://trello.com/1/authorize?key='+$("#node-input-apikey").val()+'&name=NODE-RED&expiration=never&response_type=token&scope=read,write')
+          $("#node-config-input-apikey").change(function() {
+            $("#node-config-trello-tokenbutton").attr('href', 'https://trello.com/1/authorize?key='+$("#node-config-input-apikey").val()+'&name=NODE-RED&expiration=never&response_type=token&scope=read,write')
           });
-          $("#node-input-token").change(function() {
-            if($("#node-input-token").val() && $("#node-input-token").val() != "" && $("#node-input-apikey").val() && $("#node-input-apikey").val() != ""){
-              $("#node-config-trello-startconfig").button("enable");
+          $("#node-config-input-token").change(function() {
+            if($("#node-config-input-token").val() && $("#node-config-input-token").val() != "" && $("#node-config-input-apikey").val() && $("#node-config-input-apikey").val() != ""){
+              //iuuh
             }
           });
           $("#node-config-trello-startconfig").click(function(){
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
               if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                console.log(xmlhttp.response);
+                var username = JSON.parse(xmlhttp.response).username;
+                //this.name = username;
+                $("#node-config-input-name").val(username);
+                $("#node-config-dialog-ok").button("enable");
               }
             }
-            xmlhttp.open("GET","https://trello.com/1/members/me?key="+ $("#node-input-apikey").val() +"&token=" + $("#node-input-token").val() + "",true);
+            xmlhttp.open("GET","https://trello.com/1/members/me?key="+ $("#node-config-input-apikey").val() +"&token=" + $("#node-config-input-token").val() + "",true);
             xmlhttp.send();
           });
 
@@ -62,8 +65,8 @@
     </div>
 
     <div class="form-row">
-      <label for="node-input-apikey"><i class="fa fa-user"></i> <span data-i18n="trello.label.apikey"></span></label>
-      <input type="text" id="node-input-apikey">
+      <label for="node-config-input-apikey"><i class="fa fa-user"></i> <span data-i18n="trello.label.apikey"></span></label>
+      <input type="text" id="node-config-input-apikey">
     </div>
 
     <div style="text-align: center; margin-top: 20px; ">
@@ -71,13 +74,15 @@
     </div>
 
     <div class="form-row">
-      <label for="node-input-token"> <span data-i18n="trello.label.token"></span></label>
-      <input type="text" id="node-input-token">
+      <label for="node-config-input-token"> <span data-i18n="trello.label.token"></span></label>
+      <input type="text" id="node-config-input-token">
     </div>
 
     <div style="text-align: center; margin-top: 20px; ">
       <a class="btn" id="node-config-trello-startconfig" target="_blank">Start Config</a>
     </div>
+
+    <input type="hidden" id="node-config-input-name">
 
 </script>
 
@@ -88,7 +93,7 @@
         category: 'social-output',
         color: '#298FCA',
         defaults: {
-            trello: {type:"trello-credentials", required:true},
+            trello: {value: "", type:"trello-credentials", required:true},
             name: {value:""}
         },
         inputs:1,

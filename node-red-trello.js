@@ -30,6 +30,11 @@ module.exports = function(RED){
   function GetBoards(config){
     RED.nodes.createNode(this, config);
 
+    var node = this;
+    this.on('input', function(msg) {
+      
+    });
+
   }
   RED.nodes.registerType("get-boards", GetBoards);
 
